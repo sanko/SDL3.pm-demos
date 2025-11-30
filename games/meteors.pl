@@ -56,18 +56,16 @@ sub reset_game {
 while ($running) {
     my $start_tick = SDL_GetTicks();
 
-    # 1. Event Polling
+    # Event Polling
     while ( SDL_PollEvent($event_ptr) ) {
         my $header = Affix::cast( $event_ptr, SDL_CommonEvent );
-
-        # XXX: I hate this syntax on cast(...). I'm kind of stuck (for now) because pinned scalars leak without an RV
-        if ( $$header->{type} == SDL_EVENT_QUIT ) {
+        if ( $header->{type} == SDL_EVENT_QUIT ) {
             $running = 0;
         }
-        elsif ( $$header->{type} == SDL_EVENT_KEY_DOWN || $$header->{type} == SDL_EVENT_KEY_UP ) {
+        elsif ( $header->{type} == SDL_EVENT_KEY_DOWN || $header->{type} == SDL_EVENT_KEY_UP ) {
             my $key_evt = Affix::cast( $event_ptr, SDL_KeyboardEvent );
-            my $is_down = ( $$header->{type} == SDL_EVENT_KEY_DOWN ) ? 1 : 0;
-            my $code    = $$key_evt->{scancode};
+            my $is_down = ( $header->{type} == SDL_EVENT_KEY_DOWN ) ? 1 : 0;
+            my $code    = $key_evt->{scancode};
             if    ( $code == SDL_SCANCODE_LEFT )   { $keys{left}  = $is_down; }
             elsif ( $code == SDL_SCANCODE_RIGHT )  { $keys{right} = $is_down; }
             elsif ( $code == SDL_SCANCODE_ESCAPE ) { $running     = 0; }
