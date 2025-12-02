@@ -9,9 +9,9 @@ use SDL3  qw[:all];
 use Data::Dump;
 $|++;
 
-# The 'Hello, World' of graphics programs. Draws a colorful, spinning trangle to the scren.
+# The 'Hello, World' of graphics programs. Draws a colorful, spinning triangle to the screen.
 #
-# We can just describe the vertices in a list of hashes hash and Affix handles packing them
+# We just describe the vertices in a list of hashes and Affix handles packing them
 # into an array of C structs for the GPU.
 #
 # No controls. You just watch it a few seconds and close the window.
