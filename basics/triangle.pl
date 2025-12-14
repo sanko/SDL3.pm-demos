@@ -1,8 +1,4 @@
 use v5.36;
-use FindBin '$Bin';
-use lib '../lib', 'lib';
-use blib;
-use lib $Bin;
 use Carp  qw[croak];
 use Affix qw[Int UInt32];
 use SDL3  qw[:all];
@@ -23,7 +19,7 @@ my $SCREEN_H = 600;
 # Init SDL
 SDL_Init(SDL_INIT_VIDEO) || die 'Init Error: ' . SDL_GetError();
 my $win       = SDL_CreateWindow( 'Affix + SDL3 = ▲', $SCREEN_W, $SCREEN_H, 0 );
-my $ren       = SDL_CreateRenderer( $win, undef, 0 );
+my $ren       = SDL_CreateRenderer( $win, undef );
 my $event_ptr = Affix::malloc(128);
 
 # Main loop

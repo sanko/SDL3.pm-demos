@@ -1,8 +1,4 @@
 use v5.36;
-use FindBin '$Bin';
-use lib '../lib', 'lib';
-use blib;
-use lib $Bin;
 use Carp  qw[croak];
 use Affix qw[:all];
 use SDL3  qw[:all];
@@ -36,7 +32,7 @@ my $ptr_y = Affix::calloc( 1, Int );
 for my $i ( 0 .. $WIN_COUNT - 1 ) {
     my $title = 'Bucket ' . ( $i + 1 );
     my $win   = SDL_CreateWindow( $title, $WIN_W, $WIN_H, SDL_WINDOW_RESIZABLE );
-    my $ren   = SDL_CreateRenderer( $win, undef, 0 );
+    my $ren   = SDL_CreateRenderer( $win, undef );
 
     # Cascade positions
     SDL_SetWindowPosition( $win, 200 + ( $i * 150 ), 200 + ( $i * 150 ) );

@@ -1,8 +1,4 @@
 use v5.36;
-use FindBin '$Bin';
-use lib '../lib', 'lib';
-use blib;
-use lib $Bin;
 use Carp  qw[croak];
 use Affix qw[:all];
 use SDL3  qw[:all];
@@ -10,7 +6,7 @@ $|++;
 #
 # This is really a benchmark of Affix's hot path disguised as an SDL demo.
 # I get 90 FPS average with 10k bunnies and 48 FPS with 20k on my Windows box.
-# 
+#
 # Controls:
 #  - Click/hold the left mouse button to add more bunnies
 #  - Hit 'R' on the keyboard to reset the number of bunnies to 100
@@ -25,7 +21,7 @@ my $MAX_Y         = 600;
 SDL_Init(SDL_INIT_VIDEO) || die SDL_GetError();
 #
 my $win       = SDL_CreateWindow( "Affix Bunny Benchmark", $MAX_X, $MAX_Y, 0 );
-my $ren       = SDL_CreateRenderer( $win, undef, 0 );
+my $ren       = SDL_CreateRenderer( $win, undef );
 my $event_ptr = Affix::malloc(128);
 
 # Create Bunny texture... a 32x32 white circle with ears is good enough
@@ -51,7 +47,7 @@ for my $y ( 0 .. 31 ) {
     }
 }
 my $raw_bytes = pack( 'L*', @pixels );
-SDL_UpdateTexture( $tex, undef, $raw_bytes, $tex_w * 4 );
+SDL_UpdateTexture( $tex, undef, \$raw_bytes, $tex_w * 4 );
 
 # Logic
 my @bunnies;

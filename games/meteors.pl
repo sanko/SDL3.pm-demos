@@ -1,8 +1,4 @@
 use v5.36;
-use FindBin '$Bin';
-use lib '../lib', 'lib';
-use blib;
-use lib $Bin;
 use SDL3 qw[:all];
 $|++;
 
@@ -14,7 +10,7 @@ $|++;
 #  - Space restarts on game over
 #  - Escape exits at any time
 #
-say "Controls: Left/Right arrows to move. ESC to quit.";
+say 'Controls: Left/Right arrows to move. ESC to quit.';
 
 # Configuration
 my $SCREEN_W        = 800;
@@ -26,7 +22,7 @@ my $METEOR_VARIANCE = 3.0;    # speed + random variance
 # Init SDL
 SDL_Init(SDL_INIT_VIDEO) || die SDL_GetError;
 my $win       = SDL_CreateWindow( 'Meteor Dodge', $SCREEN_W, $SCREEN_H, 0 );
-my $ren       = SDL_CreateRenderer( $win, undef, 0 );
+my $ren       = SDL_CreateRenderer( $win, undef );
 my $event_ptr = Affix::malloc(128);
 
 # Game State
@@ -108,7 +104,7 @@ while ($running) {
 
         # The SDL debug font is usually 8x8
         my $char_w = 8;
-        for my $line ( 'GAME OVER', 'Press SPACE to Restart', sprintf "Score: %d", $score ) {
+        for my $line ( 'GAME OVER', 'Press SPACE to Restart', sprintf 'Score: %d', $score ) {
             my $text_w = length($line) * $char_w;
             my $x      = ( $SCREEN_W - $text_w ) / 2;
             SDL_RenderDebugText( $ren, int($x), $y += 20, $line );
@@ -127,7 +123,7 @@ while ($running) {
 
         # UI
         SDL_SetRenderDrawColor( $ren, 255, 255, 255, 255 );
-        SDL_RenderDebugText( $ren, 10, 10, "Score: $score" );
+        SDL_RenderDebugText( $ren, 10, 10, 'Score: ' .$score );
     }
     SDL_RenderPresent($ren);
 
