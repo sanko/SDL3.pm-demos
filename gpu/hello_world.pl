@@ -1,8 +1,4 @@
 use v5.36;
-use FindBin '$Bin';
-use lib '../lib', 'lib';
-use blib;
-use lib $Bin;
 use Carp  qw[croak];
 use Affix qw[Int UInt32 Pointer Void Array UInt64 Float typedef Struct affix];
 use SDL3  qw[:all];
@@ -31,6 +27,9 @@ my $ptr_w   = Affix::calloc( 1, UInt32 );
 my $ptr_h   = Affix::calloc( 1, UInt32 );
 #
 say 'GPU Initialized. Rendering...';
+
+# Helper struct to peek into the memory returned by AcquireGPUSwapchainTexture
+typedef GPUTexturePtr_t => Struct [ value => Pointer [Void] ];
 while ($running) {
     $running = Affix::cast( $event_ptr, SDL_CommonEvent )->{type} != SDL_EVENT_QUIT while SDL_PollEvent($event_ptr);
     my $cmd = SDL_AcquireGPUCommandBuffer($gpu);
@@ -38,11 +37,11 @@ while ($running) {
     if ( SDL_AcquireGPUSwapchainTexture( $cmd, $win, $ptr_tex, $ptr_w, $ptr_h ) ) {
 
         # Get Texture Handle
-        # We cast the pointer-to-pointer to an Array of 1 texture pointer
-        # This forces Affix to immediately read the memory and give us the handle
-        my $tex_array = Affix::cast( $ptr_tex, Array [ SDL_GPUTexture, 1 ] );
-        my $tex       = $tex_array->[0];
+        # Dereference the handle using the helper struct defined above
+        # This reads the actual pointer value out of the $ptr_tex buffer
+        my $tex = Affix::cast( $ptr_tex, GPUTexturePtr_t() )->{value};
 
+        #my $tex = $$ptr_tex;
         # If SDL gives us a NULL handle (during resizes, at startup before the swapchain is built,
         # or really any time the GPU driver isn't ready to give you an image) we just skip this frame
         if ($tex) {
