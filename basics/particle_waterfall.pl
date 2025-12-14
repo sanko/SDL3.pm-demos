@@ -45,7 +45,7 @@ for my $i ( 0 .. $WIN_COUNT - 1 ) {
         rect => { x => 0, y => 0, w => $WIN_W, h => $WIN_H }
     };
 }
-my $event_ptr = Affix::malloc(128);
+my $event_ptr = Affix::calloc( 1, SDL_Event );
 
 # Particle system
 my @particles;
